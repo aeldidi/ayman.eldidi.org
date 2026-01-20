@@ -1,0 +1,21 @@
+<!-- blueprint-grain-header.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!--
+    Controls:
+      - grain strength: the last rect opacity (keep low: 0.12–0.2)
+      - grain scale:     baseFrequency in feTurbulence (0.25–0.5 for larger blobs)
+  -->
+  <defs>
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.35" numOctaves="3" seed="7"/>
+      <feColorMatrix type="matrix" values="
+        0.33 0.33 0.33 0 0
+        0.33 0.33 0.33 0 0
+        0.33 0.33 0.33 0 0
+        0 0 0 0.65 0"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="transparent"/>
+  <rect width="512" height="512" filter="url(#grain)" opacity="0.4"/>
+</svg>

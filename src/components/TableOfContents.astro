@@ -1,0 +1,111 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+  minDepth?: number;
+  maxDepth?: number;
+  className?: string;
+  maxWidth: string;
+}
+
+type TocItem = {
+  slug: string;
+  text: string;
+  depth: number;
+  number: string; // like "2.3.1"
+  indentLevel: number;
+};
+
+const { headings, maxWidth, minDepth, maxDepth, className } =
+  Astro.props as Props;
+
+const items: TocItem[] = [];
+if (headings?.length) {
+  const computedMin = Math.min(...headings.map((h) => h.depth));
+  const base = minDepth ?? computedMin;
+  const upper = maxDepth ?? 6;
+  const counters: number[] = [];
+
+  for (const h of headings) {
+    if (h.depth < base || h.depth > upper) continue;
+    const level = h.depth - base; // 0-based indent level
+    counters[level] = (counters[level] ?? 0) + 1;
+    counters.length = level + 1;
+    const number = counters.join(".");
+    items.push({
+      slug: h.slug,
+      text: h.text,
+      depth: h.depth,
+      number,
+      indentLevel: level,
+    });
+  }
+}
+---
+
+{
+  items.length > 0 && (
+    <nav
+      aria-label="Table of contents"
+      class={`toc ${className ?? ""}`}
+      style={`--toc-max-width:${maxWidth};`}
+    >
+      <ol class="toc-list">
+        {items.map((item) => (
+          <li class="toc-item" style={`--indent:${item.indentLevel * 12}px;`}>
+            <a class="toc-link" href={`#${item.slug}`}>
+              <span class="toc-number" aria-hidden="true">
+                {item.number}
+              </span>
+              {item.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    line-height: var(--line-height-tight);
+    position: sticky;
+    max-width: var(--toc-max-width);
+    width: calc(var(--toc-max-width) - 50px);
+    top: min(100px, 30%);
+    margin-left: var(--space-5);
+    border-right: var(--border-thin) solid var(--color-border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .toc {
+      position: static;
+    }
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: calc(var(--toc-max-width) - 60px);
+  }
+
+  .toc-item {
+    margin: calc(var(--space-1) / 2) 0;
+    padding-left: var(--indent);
+    text-indent: calc(-1 * var(--space-1));
+  }
+
+  .toc-link {
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .toc-number {
+    margin-right: 0.5ch;
+  }
+</style>

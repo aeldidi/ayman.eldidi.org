@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import { Temporal } from "temporal-polyfill";
+import Common from "../layouts/Common.astro";
+import BioBlurb from "../components/BioBlurb.astro";
+import { SITE_META } from "../constants/siteMeta";
+
+const posts = (await getCollection("articles")).sort(
+  (a, b) => +b.data.date - +a.data.date,
+);
+
+const grouped = posts.reduce<Record<string, typeof posts>>((acc, post) => {
+  const year = Temporal.PlainDate.from(post.data.date).year.toString();
+  acc[year] = acc[year] || [];
+  acc[year].push(post);
+  return acc;
+}, {});
+
+const years = Object.keys(grouped)
+  .map(Number)
+  .sort((a, b) => b - a)
+  .map((year) => ({ year, items: grouped[year.toString()] }));
+---
+
+<Common title={`${SITE_META.name} — Articles`}>
+  <BioBlurb />
+  {
+    years.length === 0 ? (
+      <em>
+        You're early. The first article will be uploaded soon. For now I'm
+        testing the deployment and getting some feedback.
+      </em>
+    ) : (
+      years.map(({ year, items }) => (
+        <section class="article-year">
+          <h2>{year}</h2>
+          <ul class="article-list">
+            {items?.map((article) => {
+              const date = Temporal.PlainDate.from(article.data.date);
+              const formatted = date.toLocaleString(undefined, {
+                day: "2-digit",
+                month: "short",
+              });
+              return (
+                <li class="article-row">
+                  <time datetime={date.toString()}>{formatted}</time>
+                  <a href={`/articles/${article.data.slug}/`}>
+                    {article.data.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))
+    )
+  }
+</Common>
+
+<style>
+  .article-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .article-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-1);
+    padding: var(--space-3) 0;
+  }
+
+  .article-row time {
+    /* font-family: var(--font-mono); */
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+    width: 60px;
+  }
+
+  .article-row a {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .article-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

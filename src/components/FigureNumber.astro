@@ -1,0 +1,11 @@
+---
+import type { InlineFigureRegistry } from "../lib/inlineFigureRegistry";
+
+const { registry, id } = Astro.props as {
+  registry: InlineFigureRegistry;
+  id: string;
+};
+
+const number = registry.register(id);
+---
+{number}

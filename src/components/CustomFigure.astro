@@ -1,0 +1,58 @@
+---
+import type { InlineFigureRegistry } from "../lib/inlineFigureRegistry";
+
+type Props = {
+  id: string;
+  caption: string;
+  registry: InlineFigureRegistry;
+  className?: string;
+  showNumber?: boolean;
+};
+
+const {
+  id,
+  caption,
+  registry,
+  className,
+  showNumber = true,
+} = Astro.props as Props;
+
+const number = showNumber ? registry.register(id) : undefined;
+const figureClassName = className ? `figure ${className}` : "figure";
+---
+
+<figure class={figureClassName} data-figure-id={id} data-figure-number={number}>
+  <div class="figureContent"><slot /></div>
+  <figcaption class="caption">
+    {
+      showNumber ? (
+        <span style="font-weight: 600;">Figure {number}.</span>
+      ) : null
+    }
+    {showNumber ? " " : ""}
+    {caption}
+  </figcaption>
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .figureContent {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .caption {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
+  }
+</style>

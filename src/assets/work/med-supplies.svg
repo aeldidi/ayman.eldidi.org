@@ -1,0 +1,23 @@
+<svg width="960" height="540" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Med Supplies logistics illustration">
+  <defs>
+    <linearGradient id="medGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" rx="32" fill="#ecfdf5" />
+  <rect x="80" y="100" width="800" height="340" rx="28" fill="url(#medGradient)" opacity="0.35" />
+  <rect x="140" y="160" width="680" height="220" rx="22" fill="#ffffff" stroke="#0f766e" stroke-opacity="0.25" stroke-width="2" />
+  <g fill="#0f766e" fill-opacity="0.8">
+    <rect x="190" y="200" width="90" height="18" rx="9" />
+    <rect x="310" y="200" width="120" height="18" rx="9" />
+    <rect x="460" y="200" width="140" height="18" rx="9" />
+  </g>
+  <g fill="#34d399" fill-opacity="0.5">
+    <rect x="190" y="240" width="260" height="60" rx="14" />
+    <rect x="470" y="240" width="250" height="60" rx="14" />
+  </g>
+  <circle cx="240" cy="360" r="30" fill="#0f766e" opacity="0.9" />
+  <circle cx="720" cy="360" r="42" fill="#34d399" opacity="0.8" />
+  <rect x="290" y="340" width="360" height="40" rx="20" fill="#0f766e" opacity="0.3" />
+</svg>

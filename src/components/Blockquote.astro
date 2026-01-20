@@ -1,0 +1,62 @@
+---
+interface Props {
+  source?: string;
+  sourceURL?: string;
+}
+
+const { source, sourceURL } = Astro.props as Props;
+---
+
+<div class="container">
+  {source ? (
+    sourceURL ? (
+      <a href={sourceURL} class="citeLink">
+        <cite class="cite">{source}</cite>
+      </a>
+    ) : (
+      <cite class="cite">{source}</cite>
+    )
+  ) : null}
+  <blockquote cite={sourceURL} class="quote">
+    <slot />
+  </blockquote>
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .citeLink {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border-subtle);
+  }
+
+  .cite {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-style: normal;
+  }
+
+  .quote {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-left: var(--border-thick) solid var(--color-border-strong);
+    color: var(--color-text);
+    font-style: normal;
+    box-shadow: var(--shadow-subtle);
+  }
+
+  @media (max-width: 700px) {
+    .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

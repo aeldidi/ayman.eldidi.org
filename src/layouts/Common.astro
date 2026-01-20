@@ -1,0 +1,216 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_META } from "../constants/siteMeta";
+import "../fonts/Open Sans/open-sans.css";
+import "../fonts/Inconsolata/inconsolata.css";
+import blueprintBg from "../assets/texture/blueprint-bg.svg";
+import blueprintGrain from "../assets/texture/blueprint-paper-grain.svg";
+import contentPaper from "../assets/texture/content-paper.svg";
+
+interface Props {
+  title?: string;
+  description?: string;
+  robots?: string;
+}
+
+const {
+  title = SITE_META.name,
+  description = SITE_META.bio,
+  robots,
+}: Props = Astro.props;
+
+const resolveTextureUrl = (asset: string | { src: string }) =>
+  typeof asset === "string" ? asset : asset.src;
+
+const textureVars = {
+  "--textureBlueprintGrid": `url(${resolveTextureUrl(blueprintBg)})`,
+  "--textureBlueprintGrain": `url(${resolveTextureUrl(blueprintGrain)})`,
+  "--textureContentPaper": `url(${resolveTextureUrl(contentPaper)})`,
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {robots && <meta name="robots" content={robots} />}
+  </head>
+  <body style={textureVars}>
+    <div class="site-shell">
+      <Header />
+      <main class="site-main">
+        <div class="site-main__inner">
+          <slot />
+          <Footer />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light;
+    --color-blueprint: #3371d8;
+    --color-accent: #e67e22;
+    --color-bg: #f4f7fb;
+    --color-paper: #fafafa;
+    --color-text: #1f2937;
+    --color-heading: #1f2937;
+    --color-link: #3372d8;
+    --color-link-visited: #551a8b;
+    --color-text-faint: rgba(31, 41, 55, 0.45);
+    --color-text-subtle: rgba(31, 41, 55, 0.65);
+    --color-text-muted: #4b5563;
+    --color-text-soft: rgba(31, 41, 55, 0.8);
+    --color-text-strong: rgba(31, 41, 55, 0.92);
+    --color-border-soft: rgba(0, 102, 255, 0.12);
+    --color-border-subtle: #dbe3f0;
+    --color-border-strong: rgba(0, 102, 255, 0.35);
+    --color-surface: var(--color-paper);
+    --color-surface-alt: #f5f9ff;
+    --color-code-border: #dbe3f0;
+    --color-code-line-highlight: rgba(0, 102, 255, 0.08);
+    --color-code-column-highlight: rgba(0, 102, 255, 0.14);
+    --color-code-line-number: #6b7280;
+    --shadow-subtle:
+      0 2px 4px rgba(15, 23, 42, 0.08), 0 10px 18px rgba(15, 23, 42, 0.06);
+    --shadow-elevated: none;
+    --radius-2xs: 0px;
+    --radius-xs: 0px;
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 40px;
+    --space-8: 48px;
+    --font-body: "Open Sans", sans-serif;
+    --font-mono: "Inconsolata", monospace;
+    --font-size-xs: 0.85rem;
+    --font-size-sm: 0.9rem;
+    --font-size-md: 0.95rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.5rem;
+    --font-size-article: 15.5px;
+    --font-size-code: 13.5px;
+    --font-size-code-meta: 12.5px;
+    --line-height-body: 1.7;
+    --line-height-relaxed: 1.75;
+    --line-height-tight: 1.4;
+    --border-thin: 1px;
+    --border-thick: 2px;
+    --article-width: 760px;
+    --content-base: var(--article-width);
+    --content-max: var(--content-base);
+    --content-wide: 70vw;
+    --blueprint-reveal-width: 1100px;
+    --blueprint-content-width: 80vw;
+  }
+
+  * {
+    box-sizing: border-box;
+    accent-color: var(--color-blueprint);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-bg);
+    background-image: var(--textureBlueprintGrid), var(--textureBlueprintGrain);
+    background-repeat: repeat, repeat;
+    background-size:
+      256px 256px,
+      512px 512px;
+    background-position: top left;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-body);
+  }
+
+  a {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  a:visited {
+    color: var(--color-link-visited);
+  }
+
+  a:hover,
+  a:focus-visible {
+    /* text-decoration-color: var(--color-accent); */
+    text-decoration-thickness: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  p {
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  ul {
+    padding-left: var(--space-4);
+  }
+</style>
+
+<style>
+  .site-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .site-main {
+    flex: 1;
+    width: min(
+      100%,
+      max(var(--blueprint-content-width), var(--blueprint-reveal-width))
+    );
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-6) var(--space-8);
+    background-color: var(--color-surface);
+    background-image: var(--textureContentPaper);
+    background-repeat: repeat;
+    background-size: 768px 768px;
+    border-left: var(--border-thin) solid var(--color-border-subtle);
+    border-right: var(--border-thin) solid var(--color-border-subtle);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .site-main__inner {
+    width: min(var(--content-max), 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 720px) {
+    .site-main {
+      padding: var(--space-5) var(--space-3) var(--space-6);
+      border-left: none;
+      border-right: none;
+    }
+  }
+</style>

@@ -1,0 +1,39 @@
+/* open-sans-regular - cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./open-sans-v44-cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese-regular.woff2")
+    format("woff2");
+  font-display: optional;
+}
+
+/* open-sans-italic - cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese */
+@font-face {
+  font-family: "Open Sans";
+  font-style: italic;
+  font-weight: 400;
+  src: url("./open-sans-v44-cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese-italic.woff2")
+    format("woff2");
+  font-display: optional;
+}
+
+/* open-sans-500 - cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./open-sans-v44-cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese-500.woff2")
+    format("woff2");
+  font-display: optional;
+}
+
+/* open-sans-600 - cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 600;
+  src: url("./open-sans-v44-cyrillic_cyrillic-ext_greek_greek-ext_hebrew_latin_latin-ext_math_symbols_vietnamese-600.woff2")
+    format("woff2");
+  font-display: optional;
+}

@@ -1,0 +1,19 @@
+<svg width="960" height="540" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scoutliner project illustration">
+  <defs>
+    <linearGradient id="scoutlinerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#60a5fa" />
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" rx="32" fill="#0f172a" />
+  <rect x="90" y="90" width="780" height="360" rx="28" fill="url(#scoutlinerGradient)" opacity="0.75" />
+  <rect x="140" y="140" width="680" height="260" rx="22" fill="#0f172a" opacity="0.9" />
+  <g stroke="#60a5fa" stroke-width="4" stroke-linecap="round" stroke-opacity="0.8">
+    <path d="M180 320 L280 260 L380 320 L480 240 L580 300 L680 240 L780 320" />
+    <path d="M180 260 L280 200 L380 260 L480 180 L580 240 L680 180 L780 260" opacity="0.5" />
+  </g>
+  <circle cx="260" cy="230" r="26" fill="#93c5fd" />
+  <circle cx="420" cy="190" r="20" fill="#bfdbfe" />
+  <circle cx="620" cy="210" r="24" fill="#c7d2fe" />
+  <rect x="240" y="360" width="480" height="40" rx="16" fill="#bfdbfe" opacity="0.5" />
+</svg>

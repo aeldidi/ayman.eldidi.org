@@ -1,0 +1,29 @@
+---
+import { SITE_META } from "../constants/siteMeta";
+---
+
+<section class="blurb" aria-label="About the author">
+  <p>{SITE_META.bio}</p>
+  <p>
+    If that sounds interesting to you, check out my
+    <a href={SITE_META.github} target="_blank" rel="noreferrer noopener">
+      GitHub
+    </a>
+    and get in touch at
+    <a href={`mailto:${SITE_META.email}`}>{SITE_META.email}</a>.
+  </p>
+</section>
+
+<style>
+  .blurb {
+    border: var(--border-thin) dashed var(--color-border-subtle);
+    padding: var(--space-3) var(--space-4);
+    background: transparent;
+    font-size: var(--font-size-base);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .blurb strong {
+    font-weight: 600;
+  }
+</style>

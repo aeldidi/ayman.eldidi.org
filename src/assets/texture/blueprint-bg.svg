@@ -1,0 +1,16 @@
+<!-- blueprint-grid.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!--
+    Controls:
+      - line opacity:   stroke-opacity on the grid path
+      - grid size:      pattern width/height (gridPattern)
+  -->
+  <defs>
+    <!-- Grid: 16px -->
+    <pattern id="gridPattern" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0V16" fill="none" stroke="#0066ff" stroke-width="1" stroke-opacity="0.12"/>
+    </pattern>
+  </defs>
+
+  <rect width="256" height="256" fill="url(#gridPattern)"/>
+</svg>

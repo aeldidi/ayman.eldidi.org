@@ -1,0 +1,127 @@
+---
+import Common from "../layouts/Common.astro";
+import { SITE_META } from "../constants/siteMeta";
+---
+
+<Common
+  title={`${SITE_META.name} — About`}
+  description="Biography, resume highlights, and contact information"
+>
+  <section>
+    <h1>About Me</h1>
+    <p>
+      I'm a professional software developer with a passion for software that is
+      as simple and efficient as possible. I started this website in 2025 to
+      document
+    </p>
+    <p>
+      I'm particularly interested in low-level software, with Rust, Go, C, and
+      C++ being the main focuses of my experimentation, although I usually use
+      C# and ASP.NET for web stuff.
+    </p>
+    <p>
+      Today I serve as an in-house engineer at Med Supplies (Vine Media Inc.),
+      maintaining the ASP.NET rental platform that serves Edmonton hospitals
+      daily. Before that I led ATG Sports' Scoutliner venture, pairing React
+      Native clients with an ASP.NET/Core backend and guiding the multi-person
+      team through architecture, code reviews, and stakeholder briefings.
+    </p>
+  </section>
+
+  <section>
+    <h2>Links & Documents</h2>
+    <ul class="about-links">
+      <li>
+        <a href="/resume.pdf" target="_blank" rel="noreferrer noopener"
+          >Résumé (PDF)</a
+        >
+      </li>
+      <li>
+        <a href={SITE_META.github} target="_blank" rel="noreferrer noopener"
+          >GitHub</a
+        >
+      </li>
+      <li><a href={`mailto:${SITE_META.email}`}>Email {SITE_META.email}</a></li>
+    </ul>
+  </section>
+</Common>
+
+<style>
+  h1 {
+    margin-top: 0;
+  }
+
+  .about-links {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .about-links a {
+    font-weight: 500;
+  }
+
+  .about-experience {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-5) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .about-experience li {
+    border: var(--border-thin) dashed var(--color-border-subtle);
+    padding: var(--space-4) var(--space-5);
+    background: transparent;
+  }
+
+  .about-experience__role {
+    margin: 0;
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  .about-experience__meta {
+    margin: var(--space-1) 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-subtle);
+  }
+
+  .about-experience li > p {
+    margin: 0 0 var(--space-3);
+  }
+
+  .about-experience li ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .about-experience li ul li {
+    margin-bottom: var(--space-1);
+  }
+
+  .about-skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-4) 0 0;
+  }
+
+  .about-skills__label {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-subtle);
+  }
+
+  .about-skills p {
+    margin: 0;
+  }
+</style>

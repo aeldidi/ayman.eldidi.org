@@ -1,0 +1,149 @@
+---
+import { Temporal } from "temporal-polyfill";
+import BioBlurb from "./BioBlurb.astro";
+
+type ArticleNavLink = {
+  href: string;
+  title: string;
+};
+
+type Props = {
+  date: string;
+  previous: ArticleNavLink | undefined;
+  next: ArticleNavLink | undefined;
+};
+
+const { date, previous, next } = Astro.props as Props;
+
+const published = Temporal.PlainDate.from(date);
+const formattedDate = published.toLocaleString(undefined, {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<footer class="footer">
+  <div class="metaRow">
+    <div class="details">
+      <time datetime={published.toString()}>{formattedDate}</time>
+    </div>
+    {(previous || next) && (
+      <nav class="nav" aria-label="Article navigation">
+        {previous ? (
+          <a href={previous.href} class="navLink" data-align="left">
+            <span aria-hidden="true">←</span> {previous.title}
+          </a>
+        ) : (
+          <span class="navPlaceholder" data-align="left" aria-hidden="true" />
+        )}
+        {next ? (
+          <a href={next.href} class="navLink" data-align="right">
+            {next.title} <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <span class="navPlaceholder" data-align="right" aria-hidden="true" />
+        )}
+      </nav>
+    )}
+  </div>
+  <BioBlurb />
+</footer>
+
+<style>
+  .footer {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: var(--border-thin) solid var(--color-border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .metaRow {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .details {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    order: 2;
+    flex: 0 0 auto;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--font-body);
+  }
+
+  .label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .note {
+    margin: 0;
+    color: var(--color-text-soft);
+  }
+
+  .details time {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .nav {
+    display: contents;
+  }
+
+  .navLink,
+  .navPlaceholder {
+    font-size: var(--font-size-md);
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .navLink[data-align="left"],
+  .navPlaceholder[data-align="left"] {
+    order: 1;
+    text-align: left;
+  }
+
+  .navLink[data-align="right"],
+  .navPlaceholder[data-align="right"] {
+    order: 3;
+    text-align: right;
+  }
+
+  @media (max-width: 600px) {
+    .metaRow {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+    }
+
+    .navLink {
+      order: 2;
+      flex: 0 0 auto;
+      width: 100%;
+      text-align: left;
+    }
+
+    .navLink[data-align="right"] {
+      text-align: left;
+    }
+
+    .navPlaceholder {
+      display: none;
+    }
+
+    .details {
+      order: 1;
+      margin: 0;
+      text-align: left;
+    }
+  }
+</style>

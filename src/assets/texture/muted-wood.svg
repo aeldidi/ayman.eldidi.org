@@ -1,0 +1,50 @@
+<!-- wood-muted.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="256" viewBox="0 0 1024 256" preserveAspectRatio="none">
+  <!--
+    Controls:
+      - wood intensity: final rect opacity (0.45–0.70)
+      - grain size:     baseFrequency in feTurbulence (lower = wider grain)
+      - overall tint:   the fill on the base rect
+  -->
+  <defs>
+    <filter id="wood" x="-10%" y="-30%" width="120%" height="160%">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.004 0.12"
+        numOctaves="2"
+        seed="21"
+        result="grain"
+      />
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.08 0.6"
+        numOctaves="1"
+        seed="11"
+        result="pores"
+      />
+      <feBlend in="grain" in2="pores" mode="multiply" result="texture"/>
+      <feColorMatrix
+        in="texture"
+        type="matrix"
+        values="
+          1.05 0 0 0 0.02
+          0 0.98 0 0 0.01
+          0 0 0.72 0 0
+          0 0 0 1 0"
+      />
+      <feComponentTransfer>
+        <feFuncR type="gamma" amplitude="1" exponent="1.2" offset="0"/>
+        <feFuncG type="gamma" amplitude="1" exponent="1.25" offset="0"/>
+        <feFuncB type="gamma" amplitude="1" exponent="1.35" offset="0"/>
+      </feComponentTransfer>
+    </filter>
+
+    <linearGradient id="woodTint" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d5b98e"/>
+      <stop offset="1" stop-color="#b48758"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="256" fill="url(#woodTint)"/>
+  <rect width="1024" height="256" filter="url(#wood)" opacity="0.5"/>
+</svg>

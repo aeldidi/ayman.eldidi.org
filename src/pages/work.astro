@@ -1,0 +1,389 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import Common from "../layouts/Common.astro";
+import { WORK_PROJECTS } from "../constants/workProjects";
+import type { WorkProject } from "../constants/workProjects";
+import { SITE_META } from "../constants/siteMeta";
+import AlbumartDigital from "../assets/work/albumart-digital.png";
+import MedSuppliesHero from "../assets/work/scapher.png";
+import ScoutlinerHero from "../assets/work/scoutliner.png";
+import UnicodeIdentifiersHero from "../assets/work/unicode-identifiers.svg";
+import BerryHomesHero from "../assets/work/berry-homes.png";
+
+const HERO_IMAGES = {
+  "med-supplies": MedSuppliesHero,
+  scoutliner: ScoutlinerHero,
+  "unicode-identifiers": UnicodeIdentifiersHero,
+  "berry-homes": BerryHomesHero,
+  "albumart-digital": AlbumartDigital,
+} satisfies Record<WorkProject["heroImage"], ImageMetadata>;
+
+const DEFAULT_HERO_WIDTH = 640;
+---
+
+<Common
+  title={`${SITE_META.name} — Work`}
+  description="Selected client and personal projects"
+>
+  <h1 class="work-title">Things I've Worked On</h1>
+  <div class="work-stack">
+    {
+      WORK_PROJECTS.map((project) => {
+        const heroAsset = HERO_IMAGES[project.heroImage];
+        const heroWidth = project.heroImageSize
+          ? project.heroImageSize.width
+          : (heroAsset.width ?? DEFAULT_HERO_WIDTH);
+        const heroHeight = project.heroImageSize
+          ? project.heroImageSize.height
+          : heroAsset.height;
+        const heroStyle = `--hero-width: ${heroWidth}px;`;
+        const usedByEntries = project.usedBy ?? [];
+        const hasUsedByEntries = usedByEntries.length > 0;
+
+        return (
+          <article class="work-entry">
+            <div class="work-entry__content">
+              <div class="work-entry__hero" style={heroStyle}>
+                {project.url ? (
+                  <a
+                    class="work-entry__hero-link"
+                    href={project.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <Picture
+                      src={HERO_IMAGES[project.heroImage]}
+                      alt={`${project.title} hero image`}
+                      width={heroWidth}
+                      height={heroHeight}
+                      sizes={`(min-width: 800px) ${heroWidth}px, 90vw`}
+                      densities={[1, 2]}
+                      formats={["avif", "webp", "png"]}
+                      loading="lazy"
+                    />
+                  </a>
+                ) : (
+                  <Picture
+                    src={HERO_IMAGES[project.heroImage]}
+                    alt={`${project.title} hero image`}
+                    width={heroWidth}
+                    height={heroHeight}
+                    sizes={`(min-width: 800px) ${heroWidth}px, 90vw`}
+                    densities={[1, 2]}
+                    formats={["avif", "webp", "png"]}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+              <div class="work-entry__body">
+                <div>
+                  <h3>
+                    {project.url ? (
+                      <a
+                        class="work-entry__title-link"
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        {project.title}
+                      </a>
+                    ) : (
+                      project.title
+                    )}
+                  </h3>
+                  <p class="work-entry__meta-line">
+                    <span>{project.period}</span>
+                  </p>
+                  <p class="work-entry__stack">{project.stack.join(", ")}</p>
+                </div>
+                <ul class="work-entry__facts">
+                  {project.roles?.length > 0 && (
+                    <li>
+                      <span>
+                        {project.roles.length > 1 ? "Roles:" : "Role:"}
+                      </span>
+                      <span>{project.roles.join(", ")}</span>
+                    </li>
+                  )}
+                  {project.teamSize && (
+                    <li>
+                      <span>Team:</span>
+                      <span>{project.teamSize}</span>
+                    </li>
+                  )}
+                  {project.status && (
+                    <li>
+                      <span>Status:</span>
+                      <span>{project.status}</span>
+                    </li>
+                  )}
+                  {project.customer && (
+                    <li>
+                      <span>Customer:</span>
+                      <span>
+                        <a
+                          href={project.customer.url}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
+                          {project.customer.name}
+                        </a>
+                      </span>
+                    </li>
+                  )}
+                  {hasUsedByEntries && (
+                    <li class="work-entry__used-by">
+                      <p class="work-entry__used-by-title">Used by:</p>
+                      <p class="work-entry__used-by-values">
+                        {usedByEntries.flatMap((usage, index) => {
+                          const link =
+                            // prettier-ignore
+                            <a class="work-entry__used-by-link" href={usage.url} target="_blank" rel="noreferrer noopener">{usage.name}</a>;
+
+                          if (index === usedByEntries.length - 1) {
+                            return [link];
+                          }
+
+                          return [link, ", "];
+                        })}
+                      </p>
+                    </li>
+                  )}
+                </ul>
+                <p>{project.description}</p>
+                {project.highlights && (
+                  <ul class="work-entry__highlights">
+                    {project.highlights.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+            {project.quotes && project.quotes.length > 0 && (
+              <div class="work-entry__quotes">
+                {project.quotes.map((quote) => (
+                  <figure class="work-quote">
+                    <blockquote>&ldquo;{quote.text}&rdquo;</blockquote>
+                    <figcaption>
+                      {quote.url ? (
+                        <a
+                          href={quote.url}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
+                          {quote.name}
+                        </a>
+                      ) : (
+                        quote.name
+                      )}
+                      {quote.title && <span> · {quote.title}</span>}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            )}
+          </article>
+        );
+      })
+    }
+  </div>
+</Common>
+
+<style is:global>
+  :root {
+    --content-max: max(var(--content-base), var(--content-wide));
+  }
+</style>
+
+<style>
+  .work-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .work-title {
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  .work-entry {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .work-entry__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .work-entry__hero {
+    width: min(var(--hero-width, 640px), 100%);
+    margin: 0 auto;
+    border: var(--border-thin) dashed var(--color-border-subtle);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .work-entry__hero-link {
+    display: block;
+  }
+
+  .work-entry__hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .work-entry__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .work-entry__meta-line {
+    margin: var(--space-1) 0 var(--space-3);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .work-entry__meta-line span + span::before {
+    content: "·";
+    margin: 0 var(--space-2);
+    display: inline-block;
+    color: var(--color-text-faint);
+  }
+
+  .work-entry h3 {
+    margin: var(--space-1) 0 var(--space-2);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  .work-entry__title-link {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .work-entry p {
+    margin: 0;
+  }
+
+  .work-entry__stack {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0 0;
+  }
+
+  .work-entry__facts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .work-entry__facts li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .work-entry__facts li span:first-child {
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .work-entry__used-by {
+    margin: var(--space-1) 0 var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .work-entry__used-by-title {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .work-entry__used-by-values {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .work-entry__used-by-link {
+    color: var(--color-link);
+    text-decoration: underline;
+    display: inline;
+  }
+
+  .work-entry__used-by-link:visited {
+    color: var(--color-link-visited);
+  }
+
+  .work-entry__used-by-separator {
+    color: var(--color-text-faint);
+  }
+
+  .work-entry__highlights {
+    margin: var(--space-3) 0 0;
+    padding-left: var(--space-5);
+    color: var(--color-text-soft);
+  }
+
+  .work-entry__highlights li {
+    margin-bottom: var(--space-1);
+  }
+
+  .work-entry__quotes {
+    margin-top: var(--space-4);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .work-quote {
+    margin: 0;
+    padding: var(--space-4) var(--space-5);
+    border-left: var(--border-thick) solid var(--color-border-strong);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .work-quote blockquote {
+    margin: 0 0 var(--space-2);
+    color: var(--color-text-strong);
+  }
+
+  .work-quote figcaption {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 1300px) {
+    .work-entry__content {
+      flex-direction: row;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .work-entry__hero {
+      margin: 0;
+      flex: 0 0 auto;
+    }
+
+    .work-entry__body {
+      flex: 1;
+    }
+  }
+</style>

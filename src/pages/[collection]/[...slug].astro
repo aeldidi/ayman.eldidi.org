@@ -1,0 +1,281 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import { Temporal } from "temporal-polyfill";
+import Common from "../../layouts/Common.astro";
+import ArticleFooter from "../../components/ArticleFooter.astro";
+import AvailabilityNotice from "../../components/AvailabilityNotice.astro";
+import { SITE_META } from "../../constants/siteMeta";
+import "../../fonts/Inconsolata/inconsolata.css";
+import { COLLECTIONS } from "../../constants/collections";
+
+type CollectionName = (typeof COLLECTIONS)[number]["name"];
+type ArticleNav = { slug: string; title: string };
+
+type PageProps = {
+  post: CollectionEntry<CollectionName>;
+  previous: ArticleNav | null;
+  next: ArticleNav | null;
+  collection: CollectionName;
+  robots?: string;
+};
+
+export async function getStaticPaths() {
+  const paths = await Promise.all(
+    COLLECTIONS.map(async ({ name, robots }) => {
+      const posts = await getCollection(name);
+      const chronological = posts
+        .slice()
+        .sort((a, b) => +b.data.date - +a.data.date);
+
+      return posts.map((post) => {
+        const currentIndex = chronological.findIndex(
+          (entry) => entry.id === post.id,
+        );
+        const previous =
+          currentIndex >= 0 ? chronological[currentIndex + 1] : undefined;
+        const next =
+          currentIndex >= 0 ? chronological[currentIndex - 1] : undefined;
+
+        return {
+          params: { collection: name, slug: post.data.slug },
+          props: {
+            post,
+            previous: previous
+              ? { slug: previous.data.slug, title: previous.data.title }
+              : null,
+            next: next
+              ? { slug: next.data.slug, title: next.data.title }
+              : null,
+            collection: name,
+            robots,
+          },
+        };
+      });
+    }),
+  );
+
+  return paths.flat();
+}
+
+const { post, previous, next, collection, robots } = Astro.props as PageProps;
+
+const { Content, remarkPluginFrontmatter } = await render(post);
+const date = Temporal.PlainDate.from(post.data.date);
+const readingTime = remarkPluginFrontmatter?.minutesRead;
+const basePath = `/${collection}`;
+const previousLink = previous
+  ? { href: `${basePath}/${previous.slug}/`, title: previous.title }
+  : undefined;
+const nextLink = next
+  ? { href: `${basePath}/${next.slug}/`, title: next.title }
+  : undefined;
+---
+
+<Common
+  title={`${post.data.title} • ${SITE_META.name}`}
+  description={post.data.description ?? SITE_META.bio}
+  robots={robots!}
+>
+  <article class="article-body">
+    <header class="article-header">
+      <h1>{post.data.title}</h1>
+      <p class="article-meta">
+        <time datetime={date.toString()}>
+          {
+            date.toLocaleString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </time>
+        {readingTime && <span> · {readingTime}</span>}
+      </p>
+      <AvailabilityNotice enabled={post.data.showAvailabilityNotice} />
+    </header>
+
+    <Content />
+
+    <ArticleFooter
+      date={post.data.date}
+      previous={previousLink}
+      next={nextLink}
+    />
+  </article>
+</Common>
+
+<style>
+  .article-header {
+    padding: 0 var(--space-4) var(--space-3);
+    margin: 0 0 var(--space-4);
+  }
+
+  .article-header h1 {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .article-meta {
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    border-bottom: var(--border-thin) dashed var(--color-border-strong);
+    padding-bottom: var(--space-2);
+    margin: 0 0 var(--space-3);
+  }
+
+  .article-body {
+    margin: 0 auto;
+    width: min(var(--article-width), 100%);
+    font-family: var(--font-body);
+    font-variation-settings: "wght" 400;
+    font-weight: 400;
+    font-size: var(--font-size-article);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .article-body :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 720px) {
+    .article-body {
+      padding: 0 var(--space-4);
+    }
+
+    .article-header {
+      padding: 0 0 var(--space-3);
+    }
+
+    .article-body :global(img) {
+      height: auto !important;
+    }
+  }
+</style>
+
+<style is:global>
+  .article-body code {
+    font-family: var(--font-mono);
+    font-size-adjust: ex-height 0.51;
+  }
+
+  .article-body {
+    --color-link: #2563eb;
+    --color-link-visited: #6c4bd9;
+    --code-border-color: var(--color-code-border);
+    --code-header-bg: var(--color-surface-alt);
+    --code-line-highlight-bg: var(--color-code-line-highlight);
+    --code-column-highlight-bg: var(--color-code-column-highlight);
+    --code-padding-x: 10px;
+    --code-padding-y: 2px;
+    --code-gutter-width: 25px;
+    --code-space-between-numbers-and-line: 10px;
+    --code-space-between-lines: 0px;
+    --code-line-height: 20px;
+  }
+
+  .article-body pre.astro-code {
+    margin: 0;
+    border: var(--border-thin) solid var(--code-border-color);
+    border-radius: var(--radius-sm);
+    padding: var(--code-padding-y) var(--code-padding-x);
+    font-size: var(--font-size-code);
+    line-height: var(--code-space-between-lines);
+  }
+
+  .article-body pre.astro-code .line {
+    display: block;
+    position: relative;
+    line-height: var(--code-line-height);
+    min-height: var(--code-line-height);
+  }
+
+  .article-body pre.astro-code[data-line-numbers] {
+    padding-left: calc(var(--code-padding-x) + var(--code-gutter-width));
+  }
+
+  .article-body pre.astro-code[data-line-numbers] .line::before {
+    content: attr(data-line);
+    position: absolute;
+    left: calc(
+      -1 * var(--code-gutter-width) - var(--code-space-between-numbers-and-line)
+    );
+    width: var(--code-gutter-width);
+    text-align: right;
+    color: var(--color-code-line-number);
+    opacity: 0.7;
+    user-select: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .article-body pre.astro-code .line.is-highlighted {
+    background: var(--code-line-highlight-bg);
+    border-radius: var(--radius-xs);
+  }
+
+  .article-body pre.astro-code .code-highlight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--highlight-start) * 1ch);
+    width: calc(var(--highlight-width) * 1ch);
+    background: var(--code-column-highlight-bg);
+    border-radius: var(--radius-2xs);
+    pointer-events: none;
+  }
+
+  .article-body pre.astro-code .line-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .article-body figure.code-block {
+    margin: var(--space-4) 0;
+    padding: 0;
+  }
+
+  .article-body figure.code-block .code-block__header {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-code-meta);
+    line-height: var(--line-height-tight);
+    background: var(--code-header-bg);
+    border: var(--border-thin) solid var(--code-border-color);
+    border-bottom: none;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .article-body figure.code-block .code-block__header a {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-body figure.code-block .code-block__header a:visited {
+    color: var(--color-link-visited);
+  }
+
+  .article-body figure.code-block pre.astro-code {
+    margin: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .article-body > * {
+    padding: var(--space-2) 0;
+    margin: 0;
+  }
+
+  .article-body > h2 {
+    font-variation-settings: "wght" 600;
+    font-weight: 600;
+    margin: var(--space-4) 0;
+  }
+
+  mjx-container:not([display="true"]) {
+    font-size-adjust: ex-height 0.45;
+  }
+</style>
