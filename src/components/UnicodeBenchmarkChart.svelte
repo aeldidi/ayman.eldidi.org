@@ -178,9 +178,16 @@
     "unicodeIdTrieRle",
   ];
 
-  const LEGEND_HEIGHT = 28;
+  const LEGEND_ROW_HEIGHT = 28;
+  const LEGEND_TOP_PADDING = 16;
   const SVG_WIDTH = 650;
   const LEGEND_ITEM_WIDTH = 140;
+  const BASE_PADDING = {
+    top: LEGEND_TOP_PADDING,
+    right: 20,
+    bottom: 36,
+    left: 56,
+  };
 
   type ChartLayout = {
     svgWidth: number;
@@ -193,6 +200,7 @@
     xSpan: number;
     maxY: number;
     paths: Array<{ impl: ImplKey; d: string }>;
+    legendItems: Array<{ impl: ImplKey; x: number; y: number }>;
     xTicks: Array<{ value: number; x: number }>;
     yTickVals: number[];
     scaleX: (v: number) => number;
@@ -232,13 +240,19 @@
 
     const svgWidth = SVG_WIDTH;
     const svgHeight = height;
+    const innerW = svgWidth - BASE_PADDING.left - BASE_PADDING.right;
+    const legendColumns = Math.max(
+      1,
+      Math.min(impls.length, Math.floor(innerW / LEGEND_ITEM_WIDTH)),
+    );
+    const legendRows = Math.ceil(impls.length / legendColumns);
+    const legendHeight = legendRows * LEGEND_ROW_HEIGHT;
     const padding = {
-      top: 16 + LEGEND_HEIGHT,
-      right: 20,
-      bottom: 36,
-      left: 56,
+      top: BASE_PADDING.top + legendHeight,
+      right: BASE_PADDING.right,
+      bottom: BASE_PADDING.bottom,
+      left: BASE_PADDING.left,
     };
-    const innerW = svgWidth - padding.left - padding.right;
     const innerH = svgHeight - padding.top - padding.bottom;
 
     const scaleX = (v: number) => padding.left + ((v - minX) / xSpan) * innerW;
@@ -261,6 +275,22 @@
     const yTickVals = Array.from({ length: yTicks + 1 }, (_, i) =>
       Math.round((maxY * i) / yTicks),
     );
+    const legendItems = impls.map((impl, idx) => {
+      const row = Math.floor(idx / legendColumns);
+      const col = idx % legendColumns;
+      const rowCount = Math.min(
+        legendColumns,
+        impls.length - row * legendColumns,
+      );
+      const rowWidth = rowCount * LEGEND_ITEM_WIDTH;
+      const rowStartX = padding.left + (innerW - rowWidth) / 2;
+      const x = rowStartX + col * LEGEND_ITEM_WIDTH;
+      const y =
+        BASE_PADDING.top +
+        row * LEGEND_ROW_HEIGHT +
+        LEGEND_ROW_HEIGHT / 2;
+      return { impl, x, y };
+    });
 
     return {
       svgWidth,
@@ -273,6 +303,7 @@
       xSpan,
       maxY,
       paths,
+      legendItems,
       xTicks,
       yTickVals,
       scaleX,
@@ -332,19 +363,6 @@
     return allowed;
   });
   const layout = $derived(buildLayout(chartData, implsToShow, height));
-  const legendStartX = $derived(
-    layout
-      ? layout.padding.left +
-          Math.max(
-            0,
-            (layout.innerW - LEGEND_ITEM_WIDTH * layout.paths.length) / 2,
-          )
-      : 0,
-  );
-  const legendY = $derived(
-    layout ? layout.padding.top - LEGEND_HEIGHT + LEGEND_HEIGHT / 2 : 0,
-  );
-
   let svgEl: SVGSVGElement | null = $state(null);
   let tooltipSize = $state<number | null>(null);
   let tooltipX = $state(0);
@@ -546,19 +564,19 @@
               />
             {/each}
           {/if}
-          <g transform={`translate(${legendStartX} ${legendY})`}>
-            {#each layout.paths as path, idx}
-              <g transform={`translate(${idx * LEGEND_ITEM_WIDTH} 0)`}>
+          <g>
+            {#each layout.legendItems as item}
+              <g transform={`translate(${item.x} ${item.y})`}>
                 <rect
                   x={0}
                   y={-8}
                   width={22}
                   height={4}
                   rx={2}
-                  fill={effectiveColors[path.impl]}
+                  fill={effectiveColors[item.impl]}
                 />
                 <text x={26} y={-4} dominant-baseline="central">
-                  {effectiveLabels[path.impl]}
+                  {effectiveLabels[item.impl]}
                 </text>
               </g>
             {/each}
