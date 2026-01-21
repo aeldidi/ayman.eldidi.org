@@ -230,7 +230,18 @@ If the answer is no, do not include it.
 
 ---
 
-## 13. Summary
+## 13. Favicon Updates
+
+To update the favicon, replace `public/favicon.svg` and run:
+
+```
+npm run generate:favicon
+```
+
+This regenerates `public/favicon.ico` plus the PNG sizes referenced in the
+layout head tags.
+
+## 14. Summary
 
 This design system aims to communicate:
 

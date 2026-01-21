@@ -6,12 +6,13 @@
     "dev": "astro dev --force",
     "build": "astro build",
     "preview": "astro preview",
+    "generate:favicon": "node scripts/generate-favicons.mjs",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
-    "@astrojs/svelte": "^7.1.1",
     "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/svelte": "^7.1.1",
     "@astrojs/ts-plugin": "^1.10.6",
     "@types/micromatch": "^4.0.9",
     "astro": "^5.16.11",
@@ -22,16 +23,17 @@
     "rehype-mathjax": "^7.1.0",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.3",
+    "svelte": "^5.38.10",
     "temporal-polyfill": "^0.3.0",
     "tree-sitter-javascript": "^0.25.0",
     "tree-sitter-rust": "^0.24.0",
     "tree-sitter-typescript": "^0.23.2",
-    "svelte": "^5.38.10",
     "typeset": "^0.3.5",
     "web-tree-sitter": "^0.26.3",
     "zod": "^4.0.10"
   },
   "devDependencies": {
+    "png-to-ico": "^3.0.1",
     "subfont": "^7.2.1"
   }
 }
