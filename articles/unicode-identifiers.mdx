@@ -116,8 +116,8 @@ comment.
 
 It's so simple, that the entire main parsing loop is shown below:
 
-```rust filename="derived_core_properties/lib.rs" lineStart="38" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/derived_core_properties/src/lib.rs#L38-L67"
-    loop {
+```rust filename="derived_core_properties/src/lib.rs" lineStart="38" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/derived_core_properties/src/lib.rs#L38-L67"
+        loop {
         buf.clear();
         if reader.read_line(&mut buf)? == 0 {
             break;
@@ -152,7 +152,7 @@ It's so simple, that the entire main parsing loop is shown below:
 With that, the table can be built by filtering out all the properties which
 aren't relevant, and mapping the ones that are into a two bit value:
 
-```rust filename="baseline/build.rs" lineStart="23" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/baseline/build.rs#L23-L42"
+```rust filename="baseline/build.rs" lineStart="23" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/baseline/build.rs#L23-L42"
     let parsed = parsed
         .iter()
         .filter(|(_, v)| v.contains("XID_Start") || v.contains("XID_Continue"))
@@ -177,7 +177,7 @@ aren't relevant, and mapping the ones that are into a two bit value:
 
 The table then just lays these values out sequentially:
 
-```rust filename="baseline/build.rs" lineStart="44" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/baseline/build.rs#L44-L59"
+```rust filename="baseline/build.rs" lineStart="44" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/baseline/build.rs#L44-L59"
     let mut buffer = Vec::new();
     let mut i = 0;
     while i <= MAX_CODEPOINT {
@@ -290,7 +290,7 @@ just a small portion of it starting somewhere close by to the result. This only
 adds a little complexity to the lookup function in the form of an additional
 shift and lookup before the run-length decoding loop:
 
-```rust filename="run_indexed/src/lib.rs" lineStart="40" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/run-indexed/src/lib.rs#L40-L53"
+```rust filename="run_indexed/src/lib.rs" lineStart="40" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/run-indexed/src/lib.rs#L40-L53"
 #[inline]
 fn block_index(block: usize) -> usize {
     debug_assert!(block < BLOCK_COUNT);
@@ -396,7 +396,7 @@ which now need to reason about a multi-leveled tree and deduplication.
 Luckily the code is still quite readable. I got away with only needing two tiny
 helper functions in the decoder:
 
-```rust filename="unicode-id-trie-rle/src/lib.rs" lineStart="41" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/unicode-id-trie-rle/src/lib.rs#L41-L60"
+```rust filename="unicode-id-trie-rle/src/lib.rs" lineStart="41" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/unicode-id-trie-rle/src/lib.rs#L41-L60"
 #[inline]
 fn load_leaf(idx: usize) -> Leaf {
     debug_assert!(idx + 1 < LEAF_OFFSETS.len());
@@ -421,7 +421,7 @@ fn leaf_value(leaf: Leaf, offset: u16) -> UnicodeIdentifierClass {
 
 and some bit twiddling in the lookup function which uses them:
 
-```rust filename="unicode-id-trie-rle/src/lib.rs" lineStart="62" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/unicode-id-trie-rle/src/lib.rs#L62-L85"
+```rust filename="unicode-id-trie-rle/src/lib.rs" lineStart="62" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/unicode-id-trie-rle/src/lib.rs#L62-L85"
 /// Returns whether the codepoint specified has the properties `ID_Start`,
 /// `XID_Start` or the properties `ID_Continue` or `XID_Continue`.
 #[inline]
@@ -459,7 +459,7 @@ wasted bits.
 To encode this, the build script first globally run-length encodes the data
 including a sentinel at the end:
 
-```rust filename="unicode-id-trie-rle" lineStart="47" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/unicode-id-trie-rle/build.rs#L47-L72"
+```rust filename="unicode-id-trie-rle/build.rs" lineStart="47" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/unicode-id-trie-rle/build.rs#L47-L72"
 fn build_runs(table: &[u8]) -> Vec<(u32, u8)> {
     let mut runs = Vec::with_capacity(1024);
     let end_cp = MAX_CODEPOINT + 1; // sentinel run start
@@ -491,7 +491,7 @@ fn build_runs(table: &[u8]) -> Vec<(u32, u8)> {
 then splits it into blocks and uses a hashmap to deduplicate the data "for
 free" as it's processed, rather than doing it after the fact:
 
-```rust filename="unicode-id-trie-rle" lineStart="156" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/5c8f2b556005d417512dfb529965fc73797fedc3/unicode-id-trie-rle/build.rs#L156-L199"
+```rust filename="unicode-id-trie-rle/build.rs" lineStart="156" fileUrl="https://github.com/aeldidi/unicode-id-trie-rle/blob/1d03d8dae8970e926ae23c9cf4a7e5e38ca4f645/unicode-id-trie-rle/build.rs#L156-L199"
     let mut leaf_runs: Vec<(u16, u8)> = Vec::new();
     let mut leaf_offsets: Vec<u16> = Vec::new(); // start index into leaf_runs
     let mut leaf_map: HashMap<Vec<(u16, u8)>, u16> = HashMap::new();
