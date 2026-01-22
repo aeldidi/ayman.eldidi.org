@@ -17,5 +17,5 @@
   </defs>
 
   <rect width="512" height="512" fill="transparent"/>
-  <rect width="512" height="512" filter="url(#grain)" opacity="0.15"/>
+  <rect width="512" height="512" filter="url(#grain)" opacity="0.15" />
 </svg>
