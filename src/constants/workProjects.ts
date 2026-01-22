@@ -45,7 +45,7 @@ export type WorkProject = {
 export const WORK_PROJECTS: WorkProject[] = [
   {
     title: "Scapher",
-    roles: ["Software Developer", "Platform Owner"],
+    roles: ["Software Developer", "Technical Owner"],
     period: "Nov 2024 — Present",
     url: "https://medsupplies.co",
     usedBy: [
@@ -73,24 +73,29 @@ export const WORK_PROJECTS: WorkProject[] = [
       url: "https://vineq.com",
     },
     stack: [
+      "Go",
       "ASP.NET Core",
-      "EF Core",
       "React",
-      "TypeScript",
       "MySQL",
       "Redis",
       "Lightspeed R-Series API",
-      "AWS",
-      "Playwright",
     ],
     description:
-      "Mission-critical rental logistics serving Edmonton vendors and " +
-      "hospitals. Designed and implemented full Scapher platform, including " +
-      "overdue legacy rental detection while shipping automation, " +
-      "reliability tooling, and live inventory views.",
+      "Technical owner for a mission-critical rental + inventory platform " +
+      "with Lightspeed R-Series integration supporting real-time, " +
+      "location-based availability and operational workflows. Implemented " +
+      "idempotent workflows and correctness guards to keep rental state " +
+      "consistent with POS-side actions.",
     highlights: [
-      "Designed overdue detection that recovers tens of thousands of " +
-        "dollars annually.",
+      "Designed near-real-time ingestion and reconciliation (streaming sync, " +
+        "backfills, consistency checks) with a 2-minute worst-case " +
+        "propagation SLA.",
+      "Built a multi-tenant worker system with strict timeouts, " +
+        "retries/backoff, and an ops dashboard to harden reliability under " +
+        "third-party failures.",
+      "Authored a typed R-Series client + distributed Redis token-bucket " +
+        "limiter to stabilize concurrency and sustain 7+ months incident-" +
+        "free operation.",
     ],
     heroImage: "med-supplies",
     heroImageSize: {
@@ -112,20 +117,24 @@ export const WORK_PROJECTS: WorkProject[] = [
     },
     stack: [
       "ASP.NET Core",
-      "C#",
+      "React",
       "React Native",
-      "Expo",
       "PostgreSQL",
       "Redis",
+      "OpenSearch",
       "Render.com",
     ],
     description:
-      "Led architecture and most of the codebase for an " +
-      "internal scouting/operations platform that digitized the agency's " +
-      "workflows and transitioned cleanly to a partner firm.",
+      "Led architecture and major backend + UI components for a scouting/" +
+      "ops platform that digitized the agency's workflows and transitioned " +
+      "cleanly to a partner firm.",
     highlights: [
-      "Conducted a performance overhaul delivering 21% overall speedups and " +
-        "5× faster hot endpoints while halving infrastructure spend.",
+      "Drove a performance initiative: 21% overall improvement and 5× " +
+        "faster critical endpoints by reshaping query patterns, adding " +
+        "finer-grained caching, and materializing search-optimized views " +
+        "(OpenSearch + Redis) with controlled staleness.",
+      "Built ingestion pipelines and operational tooling while partnering " +
+        "with the founder/PM on roadmap tradeoffs and delivery.",
     ],
     heroImage: "scoutliner",
     heroImageSize: {
@@ -146,25 +155,22 @@ export const WORK_PROJECTS: WorkProject[] = [
   },
   {
     title: "Berry Homes Live Status Page",
-    roles: ["Software Developer Consultant"],
+    roles: ["Software Developer - Go"],
     period: "May 2023 — Sept 2023",
     url: "https://berryhomes.ca",
     usedBy: [],
     teamSize: "2 Software Developers + Company Representative",
-    status:
-      "Job completed; Dashboard and automation continues to run internally " +
-      "to this day",
+    status: "Job completed.",
     customer: {
       name: "Berry Homes",
       url: "https://berryhomes.ca",
     },
-    stack: ["Go", "JavaScript"],
+    stack: ["Go"],
     description:
-      "Developed live dashboard along with lightweight automation, QA " +
-      "tooling, and report generation.",
+      "Built a Go web service that ingests company data and powers an " +
+      "internal dashboard with visualizations and metrics.",
     highlights: [
-      "Automated content updates and pricing digests that previously " +
-        "consumed hours of manual spreadsheet work each week.",
+      "Dashboard remains in use internally.",
     ],
     heroImage: "berry-homes",
     heroImageSize: {
@@ -180,8 +186,9 @@ export const WORK_PROJECTS: WorkProject[] = [
     status: "Stable",
     stack: ["Go"],
     description:
-      "0-dependency service for getting high quality album art from the " +
-      "Apple Music API.",
+      "Dependency-free Go web service integrating directly with the Apple " +
+      "Music API for high-resolution album art.",
+    highlights: ["Source code on GitHub: github.com/aeldidi/albumart.digital."],
     heroImage: "albumart-digital",
     heroImageSize: {
       height: 600,
