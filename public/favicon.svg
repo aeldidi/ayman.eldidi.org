@@ -4,7 +4,7 @@
       <path d="M16 0H0V16" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.18" />
     </pattern>
   </defs>
-  <rect width="128" height="128" fill="#3371d8" />
+  <rect width="128" height="128" fill="#2858a8" />
   <rect width="128" height="128" fill="url(#blueprintGrid)" shape-rendering="crispEdges" />
   <rect x="10" y="10" width="108" height="108" fill="none" stroke="#f8fbff" stroke-width="2" stroke-opacity="0.6" />
   <path
