@@ -7,6 +7,3 @@ https://:version.:project.pages.dev/*
 /atom.xml
   Content-Type: application/atom+xml; charset=utf-8
 
-/atom.xml/
-  Content-Type: application/atom+xml; charset=utf-8
-  
