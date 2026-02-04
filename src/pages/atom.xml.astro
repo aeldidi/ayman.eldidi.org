@@ -38,10 +38,6 @@ const feedUpdated = entries.reduce<string | null>((latest, entry) => {
 }, null);
 const resolvedFeedUpdated = feedUpdated ?? new Date().toISOString();
 
-Astro.response.headers.set(
-  "Content-Type",
-  "application/atom+xml; charset=utf-8",
-);
 ---
 
 <!--?xml version="1.0" encoding="utf-8"?-->

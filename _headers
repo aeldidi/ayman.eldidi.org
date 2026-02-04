@@ -3,4 +3,10 @@ https://:project.pages.dev/*
 
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
+
+/atom.xml
+  Content-Type: application/atom+xml; charset=utf-8
+
+/atom.xml/
+  Content-Type: application/atom+xml; charset=utf-8
   
