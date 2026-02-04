@@ -3,7 +3,10 @@ import { SITE_META } from "../constants/siteMeta";
 ---
 
 <section class="blurb" aria-label="About the author">
-  <p>{SITE_META.bio}</p>
+  <p>
+    {SITE_META.bio}
+    <a class="blurb__subscribe" href="/subscribe/">Subscribe</a>
+  </p>
   <p>
     If that sounds interesting to you, check out my
     <a href={SITE_META.github} target="_blank" rel="noreferrer noopener">
@@ -12,12 +15,6 @@ import { SITE_META } from "../constants/siteMeta";
     and get in touch at
     <a href={`mailto:${SITE_META.email}`}>{SITE_META.email}</a>.
   </p>
-  <div class="blurb__actions">
-    <a class="blurb__subscribe" href="/subscribe/">Subscribe via Feed</a>
-    <span class="blurb__hint">
-      Prefer a reader? Use the Atom feed at <a href="/atom.xml">/atom.xml</a>.
-    </span>
-  </div>
 </section>
 
 <style>
@@ -44,13 +41,14 @@ import { SITE_META } from "../constants/siteMeta";
   .blurb__subscribe {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--space-2);
     border: var(--border-thin) solid var(--color-border-strong);
     background: var(--color-surface-alt);
     color: var(--color-heading);
-    font-weight: 600;
     text-decoration: none;
     text-transform: none;
+    margin-left: 10px;
   }
 
   .blurb__subscribe:hover,

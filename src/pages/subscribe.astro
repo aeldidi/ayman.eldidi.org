@@ -11,13 +11,15 @@ const feedUrl = new URL("/atom.xml", site).href;
   description="How to subscribe to the Atom feed"
 >
   <section class="subscribe">
-    <h1>Subscribe</h1>
+    <h1>How to Subscribe</h1>
     <p>
       This site publishes an Atom feed so you can follow new posts in any feed
       reader.
     </p>
     <p>
-      Feed URL: <a href={feedUrl}>{feedUrl}</a>
+      You should be able to just point your feed reader at
+      <code>ayman.eldidi.org</code>, but the feed url is <code>{feedUrl}</code>
+      if that doesn't work.
     </p>
     <p>
       To subscribe, open your reader, choose "Add Feed" (or similar), and paste
