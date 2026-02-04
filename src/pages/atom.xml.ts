@@ -1,21 +1,10 @@
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { APIContext } from "astro";
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import svelteRenderer from "@astrojs/svelte/server.js";
-import mdxRenderer from "@astrojs/mdx/server.js";
 import { SITE_META } from "../constants/siteMeta";
-import FeedContent from "../components/FeedContent.astro";
+import { renderMdxForFeed } from "../lib/feedMdx";
 
 export const prerender = true;
-
-const container = await AstroContainer.create();
-container.addServerRenderer({ renderer: mdxRenderer });
-container.addServerRenderer({ renderer: svelteRenderer });
-container.addClientRenderer({
-  name: "@astrojs/svelte",
-  entrypoint: "@astrojs/svelte/client.js",
-});
 
 const toRfc3339 = (date: string) => `${date}T00:00:00Z`;
 const escapeXml = (value: string) =>
@@ -26,82 +15,14 @@ const escapeXml = (value: string) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const sanitizeHtml = (value: string) => {
-  let html = value;
-  html = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
-  html = html.replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, "");
-  html = html.replace(/<astro-island\b[^>]*>/gi, "");
-  html = html.replace(/<\/astro-island>/gi, "");
-  html = html.replace(/<astro-slot\b[^>]*>/gi, "");
-  html = html.replace(/<\/astro-slot>/gi, "");
-  html = html.replace(/<!--[^>]*?-->/g, "");
-  return html.trim();
-};
-
-const stripTags = (value: string) => value.replace(/<\/?[^>]+>/g, "");
-
-const formatCodeBlocks = (html: string) =>
-  html.replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, (block) => {
-    const innerMatch = block.match(/^<pre\b[^>]*>([\s\S]*?)<\/pre>$/i);
-    const inner = innerMatch ? innerMatch[1] : block;
-    const lines: string[] = [];
-    const lineRegex =
-      /<span[^>]*class=(["'])line\1[^>]*>([\s\S]*?)<\/span>/gi;
-    let match = lineRegex.exec(inner);
-    while (match) {
-      lines.push(stripTags(match[2]));
-      match = lineRegex.exec(inner);
-    }
-
-    const rawText = lines.length > 0 ? lines.join("\n") : stripTags(inner);
-    const normalized = rawText.replace(/\r\n/g, "\n");
-    const formatted = normalized
-      .split("\n")
-      .map((line) => {
-        const indentMatch = line.match(/^[ \t]+/);
-        if (!indentMatch) {
-          return line;
-        }
-        const indent = indentMatch[0].replace(/\t/g, "  ");
-        const nbspIndent = indent.replace(/ /g, "&nbsp;");
-        return `${nbspIndent}${line.slice(indentMatch[0].length)}`;
-      })
-      .join("\n");
-
-    return `<pre>${formatted}</pre>`;
-  });
-
-const stripChartControls = (html: string) =>
-  html.replace(
-    /<div[^>]*class=(["'])chart-controls\1[^>]*>[\s\S]*?<\/div>/gi,
-    "",
-  );
-
-const replaceInlineSvgs = (html: string) =>
-  html.replace(/<svg\b[\s\S]*?<\/svg>/gi, (svg) => {
-    const encoded = encodeURIComponent(svg);
-    return `<img src="data:image/svg+xml;utf8,${encoded}" alt="Chart" style="max-width:100%;height:auto;" />`;
-  });
-
-const prepareFeedHtml = (value: string) => {
-  let html = sanitizeHtml(value);
-  html = stripChartControls(html);
-  html = replaceInlineSvgs(html);
-  html = formatCodeBlocks(html);
-  return html;
-};
-
 const author = {
   name: SITE_META.name,
   email: SITE_META.email,
 };
 
 const renderContent = async (post: CollectionEntry<"articles">) => {
-  const { Content } = await render(post);
-  const html = await container.renderToString(FeedContent, {
-    props: { Content },
-  });
-  return escapeXml(prepareFeedHtml(html));
+  const html = await renderMdxForFeed(post.body);
+  return escapeXml(html);
 };
 
 export async function GET(context: APIContext): Promise<Response> {
