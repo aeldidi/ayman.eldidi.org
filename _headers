@@ -4,9 +4,9 @@ https://:project.pages.dev/*
 https://:version.:project.pages.dev/*
   X-Robots-Tag: noindex
 
-/atom.xml
-  Content-Type: application/atom+xml; charset=utf-8
+/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
 
-/atom.xml/
-  Content-Type: application/atom+xml; charset=utf-8
+/rss.xml/
+  Content-Type: application/rss+xml; charset=utf-8
   
