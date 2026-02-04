@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import EscapedSlot from "../components/EscapedSlot.astro";
 import { SITE_META } from "../constants/siteMeta";
 
@@ -16,7 +16,7 @@ const posts = (await getCollection("articles")).sort((a, b) =>
 
 const entries = await Promise.all(
   posts.map(async (post) => {
-    const { Content } = await post.render();
+    const { Content } = await render(post);
     const url = new URL(`/articles/${post.data.slug}/`, site).href;
     const published = toRfc3339(post.data.date);
     const updated = toRfc3339(post.data.updated ?? post.data.date);
