@@ -1,0 +1,29 @@
+---
+import Common from "../layouts/Common.astro";
+
+const title = "404 — Page not found";
+const description = "The page you requested could not be found.";
+---
+
+<Common title={title} description={description} robots="noindex, nofollow">
+  <section class="not-found">
+    <p class="not-found__eyebrow">404</p>
+    <h1>Page not found</h1>
+    <p>The page you're looking for doesn't exist or has moved.</p>
+  </section>
+</Common>
+
+<style>
+  .not-found {
+    padding: var(--space-6) 0 var(--space-8);
+  }
+
+  .not-found__eyebrow {
+    margin: 0 0 var(--space-2) 0;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+  }
+</style>
