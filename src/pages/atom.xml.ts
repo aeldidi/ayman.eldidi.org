@@ -3,12 +3,19 @@ import type { CollectionEntry } from "astro:content";
 import type { APIContext } from "astro";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import svelteRenderer from "@astrojs/svelte/server.js";
+import mdxRenderer from "@astrojs/mdx/server.js";
 import { SITE_META } from "../constants/siteMeta";
+import FeedContent from "../components/FeedContent.astro";
 
 export const prerender = true;
 
 const container = await AstroContainer.create();
-container.addServerRenderer(svelteRenderer);
+container.addServerRenderer({ renderer: mdxRenderer });
+container.addServerRenderer({ renderer: svelteRenderer });
+container.addClientRenderer({
+  name: "@astrojs/svelte",
+  entrypoint: "@astrojs/svelte/client.js",
+});
 
 const toRfc3339 = (date: string) => `${date}T00:00:00Z`;
 const escapeXml = (value: string) =>
@@ -19,6 +26,18 @@ const escapeXml = (value: string) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
+const sanitizeHtml = (value: string) => {
+  let html = value;
+  html = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+  html = html.replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, "");
+  html = html.replace(/<astro-island\b[^>]*>/gi, "");
+  html = html.replace(/<\/astro-island>/gi, "");
+  html = html.replace(/<astro-slot\b[^>]*>/gi, "");
+  html = html.replace(/<\/astro-slot>/gi, "");
+  html = html.replace(/<!--[^>]*?-->/g, "");
+  return html.trim();
+};
+
 const author = {
   name: SITE_META.name,
   email: SITE_META.email,
@@ -26,8 +45,10 @@ const author = {
 
 const renderContent = async (post: CollectionEntry<"articles">) => {
   const { Content } = await render(post);
-  const html = await container.renderToString(Content);
-  return escapeXml(html);
+  const html = await container.renderToString(FeedContent, {
+    props: { Content },
+  });
+  return escapeXml(sanitizeHtml(html));
 };
 
 export async function GET(context: APIContext): Promise<Response> {
