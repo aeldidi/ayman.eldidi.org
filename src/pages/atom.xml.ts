@@ -38,6 +38,59 @@ const sanitizeHtml = (value: string) => {
   return html.trim();
 };
 
+const stripTags = (value: string) => value.replace(/<\/?[^>]+>/g, "");
+
+const formatCodeBlocks = (html: string) =>
+  html.replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, (block) => {
+    const innerMatch = block.match(/^<pre\b[^>]*>([\s\S]*?)<\/pre>$/i);
+    const inner = innerMatch ? innerMatch[1] : block;
+    const lines: string[] = [];
+    const lineRegex =
+      /<span[^>]*class=(["'])line\1[^>]*>([\s\S]*?)<\/span>/gi;
+    let match = lineRegex.exec(inner);
+    while (match) {
+      lines.push(stripTags(match[2]));
+      match = lineRegex.exec(inner);
+    }
+
+    const rawText = lines.length > 0 ? lines.join("\n") : stripTags(inner);
+    const normalized = rawText.replace(/\r\n/g, "\n");
+    const formatted = normalized
+      .split("\n")
+      .map((line) => {
+        const indentMatch = line.match(/^[ \t]+/);
+        if (!indentMatch) {
+          return line;
+        }
+        const indent = indentMatch[0].replace(/\t/g, "  ");
+        const nbspIndent = indent.replace(/ /g, "&nbsp;");
+        return `${nbspIndent}${line.slice(indentMatch[0].length)}`;
+      })
+      .join("\n");
+
+    return `<pre>${formatted}</pre>`;
+  });
+
+const stripChartControls = (html: string) =>
+  html.replace(
+    /<div[^>]*class=(["'])chart-controls\1[^>]*>[\s\S]*?<\/div>/gi,
+    "",
+  );
+
+const replaceInlineSvgs = (html: string) =>
+  html.replace(/<svg\b[\s\S]*?<\/svg>/gi, (svg) => {
+    const encoded = encodeURIComponent(svg);
+    return `<img src="data:image/svg+xml;utf8,${encoded}" alt="Chart" style="max-width:100%;height:auto;" />`;
+  });
+
+const prepareFeedHtml = (value: string) => {
+  let html = sanitizeHtml(value);
+  html = stripChartControls(html);
+  html = replaceInlineSvgs(html);
+  html = formatCodeBlocks(html);
+  return html;
+};
+
 const author = {
   name: SITE_META.name,
   email: SITE_META.email,
@@ -48,7 +101,7 @@ const renderContent = async (post: CollectionEntry<"articles">) => {
   const html = await container.renderToString(FeedContent, {
     props: { Content },
   });
-  return escapeXml(sanitizeHtml(html));
+  return escapeXml(prepareFeedHtml(html));
 };
 
 export async function GET(context: APIContext): Promise<Response> {
