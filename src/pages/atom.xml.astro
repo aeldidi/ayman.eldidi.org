@@ -3,6 +3,8 @@ import { getCollection, render } from "astro:content";
 import EscapedSlot from "../components/EscapedSlot.astro";
 import { SITE_META } from "../constants/siteMeta";
 
+export const partial = true;
+
 const site = Astro.site ?? new URL("https://ayman.eldidi.org");
 const toRfc3339 = (date: string) => `${date}T00:00:00Z`;
 const author = {
