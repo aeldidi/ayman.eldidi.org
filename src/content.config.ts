@@ -6,6 +6,8 @@ const articleSchema = z.object({
   title: z.string(),
   date: zPlainDate,
   description: z.string().min(1).optional(),
+  summary: z.string().min(1).optional(),
+  updated: zPlainDate.optional(),
   tags: z.array(z.string()).default([]),
   heroImage: z.string().optional(),
   slug: z.string(),

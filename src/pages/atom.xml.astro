@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import EscapedSlot from "../components/EscapedSlot.astro";
+import { SITE_META } from "../constants/siteMeta";
+
+const site = Astro.site ?? new URL("https://ayman.eldidi.org");
+const toRfc3339 = (date: string) => `${date}T00:00:00Z`;
+const author = {
+  name: SITE_META.name,
+  email: SITE_META.email,
+};
+
+const posts = (await getCollection("articles")).sort((a, b) =>
+  b.data.date.localeCompare(a.data.date),
+);
+
+const entries = await Promise.all(
+  posts.map(async (post) => {
+    const { Content } = await post.render();
+    const url = new URL(`/articles/${post.data.slug}/`, site).href;
+    const published = toRfc3339(post.data.date);
+    const updated = toRfc3339(post.data.updated ?? post.data.date);
+    return {
+      post,
+      Content,
+      url,
+      published,
+      updated,
+    };
+  }),
+);
+
+const feedUpdated = entries.reduce<string | null>((latest, entry) => {
+  if (!latest || entry.updated > latest) {
+    return entry.updated;
+  }
+  return latest;
+}, null);
+const resolvedFeedUpdated = feedUpdated ?? new Date().toISOString();
+
+Astro.response.headers.set(
+  "Content-Type",
+  "application/atom+xml; charset=utf-8",
+);
+---
+
+<!--?xml version="1.0" encoding="utf-8"?-->
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ayman.eldidi.org</title>
+  <subtitle>Ayman El Didi's Blog</subtitle>
+  <id>{site.href}</id>
+  <link rel="alternate" href={site.href} />
+  <link
+    rel="self"
+    type="application/atom+xml"
+    href={new URL("/atom.xml", site).href}
+  />
+  <author>
+    <name>{author.name}</name>
+    <email>{author.email}</email>
+  </author>
+  <updated>{resolvedFeedUpdated}</updated>
+  {
+    entries.map(({ post, Content, url, published, updated }) => (
+      <entry>
+        <title>{post.data.title}</title>
+        <id>{url}</id>
+        <link rel="alternate" href={url} />
+        <published>{published}</published>
+        <updated>{updated}</updated>
+        <author>
+          <name>{author.name}</name>
+          <email>{author.email}</email>
+        </author>
+        {post.data.summary && <summary>{post.data.summary}</summary>}
+        <content type="html">
+          <EscapedSlot>
+            <Content />
+          </EscapedSlot>
+        </content>
+      </entry>
+    ))
+  }
+</feed>

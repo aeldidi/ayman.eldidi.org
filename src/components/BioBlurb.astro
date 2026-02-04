@@ -12,6 +12,12 @@ import { SITE_META } from "../constants/siteMeta";
     and get in touch at
     <a href={`mailto:${SITE_META.email}`}>{SITE_META.email}</a>.
   </p>
+  <div class="blurb__actions">
+    <a class="blurb__subscribe" href="/subscribe/">Subscribe via Feed</a>
+    <span class="blurb__hint">
+      Prefer a reader? Use <a href="/atom.xml">/atom.xml</a>.
+    </span>
+  </div>
 </section>
 
 <style>
@@ -25,5 +31,36 @@ import { SITE_META } from "../constants/siteMeta";
 
   .blurb strong {
     font-weight: 600;
+  }
+
+  .blurb__actions {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .blurb__subscribe {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-thin) solid var(--color-border-strong);
+    background: var(--color-surface-alt);
+    color: var(--color-heading);
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: none;
+  }
+
+  .blurb__subscribe:hover,
+  .blurb__subscribe:focus-visible {
+    background: var(--color-surface);
+    text-decoration: underline;
+  }
+
+  .blurb__hint {
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-sm);
   }
 </style>

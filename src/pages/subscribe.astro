@@ -1,0 +1,43 @@
+---
+import Common from "../layouts/Common.astro";
+import { SITE_META } from "../constants/siteMeta";
+
+const site = Astro.site ?? new URL("https://ayman.eldidi.org");
+const feedUrl = new URL("/atom.xml", site).href;
+---
+
+<Common
+  title={`${SITE_META.name} — Subscribe`}
+  description="How to subscribe to the Atom feed"
+>
+  <section class="subscribe">
+    <h1>Subscribe</h1>
+    <p>
+      This site publishes an Atom feed so you can follow new posts in any feed
+      reader.
+    </p>
+    <p>
+      Feed URL: <a href={feedUrl}>{feedUrl}</a>
+    </p>
+    <p>
+      To subscribe, open your reader, choose "Add Feed" (or similar), and paste
+      the URL above.
+    </p>
+    <p>Examples of readers that support Atom:</p>
+    <ul class="subscribe__list">
+      <li>Feedly (web)</li>
+      <li>NetNewsWire (macOS and iOS)</li>
+      <li>Inoreader (web)</li>
+    </ul>
+  </section>
+</Common>
+
+<style>
+  .subscribe h1 {
+    margin-top: 0;
+  }
+
+  .subscribe__list {
+    margin: var(--space-3) 0 0;
+  }
+</style>
