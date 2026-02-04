@@ -19,6 +19,7 @@
     "astro": "^5.16.11",
     "fast-xml-parser": "^5.3.4",
     "globby": "^14.1.0",
+    "hast-util-to-html": "^9.0.4",
     "hast-util-to-text": "^4.0.2",
     "mdast-util-to-string": "^4.0.0",
     "micromatch": "^4.0.8",

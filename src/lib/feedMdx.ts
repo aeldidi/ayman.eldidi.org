@@ -22,7 +22,7 @@ export async function renderFeedEntry(
     partial: true,
   });
 
-  return cleanFeedHtml(html, { site: options.site });
+  return await cleanFeedHtml(html, { site: options.site });
 }
 
 async function getContainer(): Promise<AstroContainer> {
