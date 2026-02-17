@@ -20,9 +20,34 @@ const years = Object.keys(grouped)
   .map(Number)
   .sort((a, b) => b - a)
   .map((year) => ({ year, items: grouped[year.toString()] }));
+
+const homeDescription =
+  "Software engineering articles by Ayman El Didi, focused on practical performance, systems, and implementation details.";
+const homeUrl = new URL("/", SITE_META.siteUrl).toString();
+
+const webSiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  url: homeUrl,
+  name: SITE_META.name,
+  alternateName: SITE_META.alternateName,
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_META.name,
+  url: homeUrl,
+  email: SITE_META.email,
+  sameAs: SITE_META.sameAs,
+};
 ---
 
-<Common title={SITE_META.name}>
+<Common
+  title={SITE_META.name}
+  description={homeDescription}
+  jsonLd={[webSiteJsonLd, personJsonLd]}
+>
   <BioBlurb />
   {
     years.length === 0 ? (

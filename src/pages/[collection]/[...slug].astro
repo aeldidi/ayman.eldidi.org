@@ -64,18 +64,71 @@ const { Content, remarkPluginFrontmatter } = await render(post);
 const date = Temporal.PlainDate.from(post.data.date);
 const readingTime = remarkPluginFrontmatter?.minutesRead;
 const basePath = `/${collection}`;
+const articlePath = `${basePath}/${post.data.slug}/`;
+const articleDescription =
+  post.data.description ?? post.data.summary ?? SITE_META.bio;
+const publishedTime = `${post.data.date}T00:00:00Z`;
+const modifiedTime = `${post.data.updated ?? post.data.date}T00:00:00Z`;
+const articleUrl = new URL(articlePath, SITE_META.siteUrl).toString();
+const articleOgImage = post.data.ogImage ?? SITE_META.defaultOgImage;
+const articleOgImageUrl = new URL(articleOgImage, SITE_META.siteUrl).toString();
+
 const previousLink = previous
   ? { href: `${basePath}/${previous.slug}/`, title: previous.title }
   : undefined;
 const nextLink = next
   ? { href: `${basePath}/${next.slug}/`, title: next.title }
   : undefined;
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.data.title,
+  description: articleDescription,
+  image: [articleOgImageUrl],
+  datePublished: publishedTime,
+  dateModified: modifiedTime,
+  author: {
+    "@type": "Person",
+    name: SITE_META.name,
+    url: SITE_META.siteUrl,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": articleUrl,
+  },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: new URL("/", SITE_META.siteUrl).toString(),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: post.data.title,
+      item: articleUrl,
+    },
+  ],
+};
 ---
 
 <Common
   title={`${post.data.title} • ${SITE_META.name}`}
-  description={post.data.description ?? SITE_META.bio}
-  robots={robots!}
+  description={articleDescription}
+  robots={robots}
+  canonicalPath={articlePath}
+  ogType="article"
+  ogImage={articleOgImage}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  jsonLd={[articleJsonLd, breadcrumbJsonLd]}
 >
   <article class="article-body">
     <header class="article-header">

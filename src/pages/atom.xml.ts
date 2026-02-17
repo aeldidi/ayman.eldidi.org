@@ -9,7 +9,7 @@ export const prerender = true;
 const toDate = (value: string) => new Date(`${value}T00:00:00Z`);
 
 export async function GET(context: APIContext): Promise<Response> {
-  const site = context.site ?? new URL("https://ayman.eldidi.org");
+  const site = context.site ?? new URL(SITE_META.siteUrl);
   const posts = (await getCollection("articles")).sort((a, b) =>
     b.data.date.localeCompare(a.data.date),
   );

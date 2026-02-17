@@ -10,8 +10,11 @@ const articleSchema = z.object({
   updated: zPlainDate.optional(),
   tags: z.array(z.string()).default([]),
   heroImage: z.string().optional(),
+  ogImage: z.string().min(1).optional(),
   slug: z.string(),
   showAvailabilityNotice: z.boolean().default(true),
+}).refine((data) => Boolean(data.description || data.summary), {
+  message: "Article frontmatter must include either description or summary.",
 });
 
 const articles = defineCollection({
