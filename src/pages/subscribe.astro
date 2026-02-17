@@ -1,15 +1,11 @@
 ---
 import Common from "../layouts/Common.astro";
-import { SITE_META } from "../constants/siteMeta";
 
 const site = Astro.site ?? new URL("https://ayman.eldidi.org");
 const feedUrl = new URL("/atom.xml", site).href;
 ---
 
-<Common
-  title={`${SITE_META.name} — Subscribe`}
-  description="How to subscribe to the Atom feed"
->
+<Common title="Subscribe" description="How to subscribe to the Atom feed">
   <section class="subscribe">
     <h1>How to Subscribe</h1>
     <p>

@@ -4,7 +4,6 @@ import type { ImageMetadata } from "astro";
 import Common from "../layouts/Common.astro";
 import { WORK_PROJECTS } from "../constants/workProjects";
 import type { WorkProject } from "../constants/workProjects";
-import { SITE_META } from "../constants/siteMeta";
 import AlbumartDigital from "../assets/work/albumart-digital.png";
 import MedSuppliesHero from "../assets/work/scapher.png";
 import ScoutlinerHero from "../assets/work/scoutliner.png";
@@ -22,10 +21,7 @@ const HERO_IMAGES = {
 const DEFAULT_HERO_WIDTH = 640;
 ---
 
-<Common
-  title={`${SITE_META.name} — Work`}
-  description="Selected client and personal projects"
->
+<Common title={"My Work"} description="Selected client and personal projects">
   <h1 class="work-title">Things I've Worked On</h1>
   <div class="work-stack">
     {

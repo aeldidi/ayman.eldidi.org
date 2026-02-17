@@ -22,7 +22,7 @@ const years = Object.keys(grouped)
   .map((year) => ({ year, items: grouped[year.toString()] }));
 ---
 
-<Common title={`${SITE_META.name} — Articles`}>
+<Common title={SITE_META.name}>
   <BioBlurb />
   {
     years.length === 0 ? (
