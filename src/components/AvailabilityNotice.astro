@@ -1,8 +1,8 @@
 ---
-const { enabled } = Astro.props as { enabled: boolean };
+import { SITE_META } from "../constants/siteMeta";
 ---
 
-{enabled && (
+{SITE_META.showAvailabilityNotice && (
   <p class="notice">
     The author is currently open to employment opportunities in Canada.
   </p>

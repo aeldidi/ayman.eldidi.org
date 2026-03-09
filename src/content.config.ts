@@ -12,7 +12,6 @@ const articleSchema = z.object({
   heroImage: z.string().optional(),
   ogImage: z.string().min(1).optional(),
   slug: z.string(),
-  showAvailabilityNotice: z.boolean().default(true),
 }).refine((data) => Boolean(data.description || data.summary), {
   message: "Article frontmatter must include either description or summary.",
 });

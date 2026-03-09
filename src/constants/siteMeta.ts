@@ -11,6 +11,7 @@ export const SITE_META = {
   linkedin: LINKEDIN_URL,
   sameAs: [GITHUB_URL, LINKEDIN_URL],
   defaultOgImage: "/og/default.png",
+  showAvailabilityNotice: false,
   bio:
     "Hi, I'm Ayman. I'm a professional software developer with a passion for efficient and well designed software. Here I write about things I find personally interesting.",
   publicDomainNote:
