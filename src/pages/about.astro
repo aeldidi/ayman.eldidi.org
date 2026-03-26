@@ -19,15 +19,15 @@ import { SITE_META } from "../constants/siteMeta";
       C# and ASP.NET for web stuff.
     </p>
     <p>
-      Today I serve as an in-house engineer at Med Supplies (Vine Media Inc.),
-      maintaining the ASP.NET rental platform that serves Edmonton hospitals
-      daily. Before that I led ATG Sports' Scoutliner venture, pairing React
-      Native clients with an ASP.NET/Core backend and guiding the multi-person
+      I currently serve as a Senior Backend Developer at Riva International Inc.
+      Before that I was the sole in-house engineer at Med Supplies (Vine Media
+      Inc.), maintaining the ASP.NET rental platform that serves Edmonton
+      hospitals daily. Prior to that I led ATG Sports' Scoutliner venture,
+      pairing React Native clients with an ASP.NET Core backend and guiding the
       team through architecture, code reviews, and stakeholder briefings before
       the project was handed off to an external firm for maintenance.
     </p>
   </section>
-
   <section>
     <h2>Links & Documents</h2>
     <ul class="about-links">
@@ -45,7 +45,8 @@ import { SITE_META } from "../constants/siteMeta";
         <a
           href="https://linkedin.com/in/aeldidi"
           target="_blank"
-          rel="noreferrer noopener"
+          rel="noreferrer
+        noopener"
         >
           LinkedIn
         </a>
@@ -53,84 +54,72 @@ import { SITE_META } from "../constants/siteMeta";
       <li><a href={`mailto:${SITE_META.email}`}>Email {SITE_META.email}</a></li>
     </ul>
   </section>
+
+  <style>
+    h1 {
+      margin-top: 0;
+    }
+    .about-links {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-5) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .about-links a {
+      font-weight: 500;
+    }
+    .about-experience {
+      list-style: none;
+      padding: 0;
+      margin: var(--space-5) 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+    .about-experience li {
+      border: var(--border-thin) dashed var(--color-border-subtle);
+      padding: var(--space-4) var(--space-5);
+      background: transparent;
+    }
+    .about-experience__role {
+      margin: 0;
+      font-weight: 600;
+      color: var(--color-heading);
+    }
+    .about-experience__meta {
+      margin: var(--space-1) 0 var(--space-3);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-subtle);
+    }
+    .about-experience li > p {
+      margin: 0 0 var(--space-3);
+    }
+    .about-experience li ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    .about-experience li ul li {
+      margin-bottom: var(--space-1);
+    }
+    .about-skills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-4);
+      margin: var(--space-4) 0 0;
+    }
+    .about-skills__label {
+      margin: 0 0 var(--space-1);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-subtle);
+    }
+    .about-skills p {
+      margin: 0;
+    }
+  </style>
 </Common>
-
-<style>
-  h1 {
-    margin-top: 0;
-  }
-
-  .about-links {
-    list-style: none;
-    padding: 0;
-    margin: var(--space-5) 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .about-links a {
-    font-weight: 500;
-  }
-
-  .about-experience {
-    list-style: none;
-    padding: 0;
-    margin: var(--space-5) 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-  }
-
-  .about-experience li {
-    border: var(--border-thin) dashed var(--color-border-subtle);
-    padding: var(--space-4) var(--space-5);
-    background: transparent;
-  }
-
-  .about-experience__role {
-    margin: 0;
-    font-weight: 600;
-    color: var(--color-heading);
-  }
-
-  .about-experience__meta {
-    margin: var(--space-1) 0 var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-subtle);
-  }
-
-  .about-experience li > p {
-    margin: 0 0 var(--space-3);
-  }
-
-  .about-experience li ul {
-    margin: 0;
-    padding-left: 1.2rem;
-  }
-
-  .about-experience li ul li {
-    margin-bottom: var(--space-1);
-  }
-
-  .about-skills {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--space-4);
-    margin: var(--space-4) 0 0;
-  }
-
-  .about-skills__label {
-    margin: 0 0 var(--space-1);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-text-subtle);
-  }
-
-  .about-skills p {
-    margin: 0;
-  }
-</style>
