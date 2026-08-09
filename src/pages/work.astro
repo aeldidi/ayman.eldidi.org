@@ -9,6 +9,7 @@ import MedSuppliesHero from "../assets/work/scapher.png";
 import ScoutlinerHero from "../assets/work/scoutliner.png";
 import UnicodeIdentifiersHero from "../assets/work/unicode-identifiers.svg";
 import BerryHomesHero from "../assets/work/berry-homes.png";
+import RivaHero from "../assets/work/riva.png";
 
 const HERO_IMAGES = {
   "med-supplies": MedSuppliesHero,
@@ -16,6 +17,7 @@ const HERO_IMAGES = {
   "unicode-identifiers": UnicodeIdentifiersHero,
   "berry-homes": BerryHomesHero,
   "albumart-digital": AlbumartDigital,
+  riva: RivaHero,
 } satisfies Record<WorkProject["heroImage"], ImageMetadata>;
 
 const DEFAULT_HERO_WIDTH = 640;
@@ -117,16 +119,20 @@ const DEFAULT_HERO_WIDTH = 640;
                       <span>{project.status}</span>
                     </li>
                   )}
-                  {project.customer && (
+                  {project.for && (
                     <li>
-                      <span>Customer:</span>
+                      <span>
+                        {project.for.type === "contract"
+                          ? "Customer:"
+                          : "Employer:"}
+                      </span>
                       <span>
                         <a
-                          href={project.customer.url}
+                          href={project.for.url}
                           target="_blank"
                           rel="noreferrer noopener"
                         >
-                          {project.customer.name}
+                          {project.for.name}
                         </a>
                       </span>
                     </li>

@@ -8,6 +8,7 @@ export type WorkQuote = {
 export type WorkCustomer = {
   name: string;
   url: string;
+  type: "contract" | "job";
 };
 
 export type HeroImageSize = {
@@ -29,6 +30,7 @@ export type WorkProject = {
   url?: string;
   usedBy?: WorkUsage[];
   heroImage:
+    | "riva"
     | "med-supplies"
     | "scoutliner"
     | "berry-homes"
@@ -37,16 +39,76 @@ export type WorkProject = {
   heroImageSize?: HeroImageSize;
   teamSize?: string;
   status?: string;
-  customer?: WorkCustomer;
+  for?: WorkCustomer;
   highlights?: string[];
   quotes?: WorkQuote[];
 };
 
 export const WORK_PROJECTS: WorkProject[] = [
   {
+    title: "Riva",
+    roles: ["Senior Backend Developer"],
+    period: "March 2026 — Present",
+    url: "https://rivaengine.com/",
+    usedBy: [
+      {
+        name: "MassMutual",
+        url: "https://www.massmutual.com/",
+      },
+      {
+        name: "Pernod Ricard",
+        url: "https://www.pernod-ricard.com",
+      },
+      {
+        name: "Houlihan Lokey",
+        url: "https://hl.com/",
+      },
+      {
+        name: "Mizuho Financial Group",
+        url: "https://www.mizuhogroup.com/",
+      },
+    ],
+    heroImage: "riva",
+    heroImageSize: {
+      width: 500,
+      height: 283,
+    },
+    teamSize: "6",
+    status: "In production, actively used by 200+ organizations",
+    for: {
+      name: "Riva International Inc.",
+      url: "https://rivaengine.com/",
+      type: "job",
+    },
+    description:
+      "SaaS and On-Premise software which syncs data between a CRM and " +
+      "Email/Calendar/Meeting providers trusted by 200+ organizations " +
+      "worldwide.",
+    highlights: [
+      "Worked on the core product, evolving and maintaining " +
+        "mission-critical code",
+      "Acted as feature-lead on projects, driving the end-to-end delivery " +
+        "of project features, owning design and implementation concerns",
+      "Worked directly with high-profile customers in order to deliver " +
+        "features and customizations tailored to their business needs",
+    ],
+    stack: [
+      "C#",
+      ".NET 8",
+      ".NET Framework 4.8",
+      "AWS",
+      "MongoDB",
+      "Redis",
+      "Exchange Web Services (EWS) API",
+      "Microsoft Graph API",
+      "Salesforce API",
+      "Microsoft Dynamics API",
+    ],
+  },
+  {
     title: "Scapher",
     roles: ["Software Developer", "Technical Owner"],
-    period: "Nov 2024 — Present",
+    period: "Nov 2024 — March 2026",
     url: "https://medsupplies.co",
     usedBy: [
       {
@@ -66,11 +128,12 @@ export const WORK_PROJECTS: WorkProject[] = [
         url: "https://www.medicineplace.ca",
       },
     ],
-    teamSize: "2 (me and 1 Senior Software Developer)",
-    status: "Actively in production",
-    customer: {
+    teamSize: "2",
+    status: "In production, actively used.",
+    for: {
       name: "Vine Media Inc.",
       url: "https://vineq.com",
+      type: "job",
     },
     stack: [
       "Go",
@@ -81,21 +144,16 @@ export const WORK_PROJECTS: WorkProject[] = [
       "Lightspeed R-Series API",
     ],
     description:
-      "Technical owner for a mission-critical rental + inventory platform " +
-      "with Lightspeed R-Series integration supporting real-time, " +
-      "location-based availability and operational workflows. Implemented " +
-      "idempotent workflows and correctness guards to keep rental state " +
-      "consistent with POS-side actions.",
+      "Rental + inventory management platform with Lightspeed R-Series " +
+      "integration supporting real-time location-based availability and " +
+      "operational workflows.",
     highlights: [
-      "Designed near-real-time ingestion and reconciliation (streaming sync, " +
-        "backfills, consistency checks) with a 2-minute worst-case " +
-        "propagation SLA.",
+      "Designed ingestion and reconciliation for Lightspeed data (streaming " +
+        "sync, backfills, consistency checks)",
       "Built a multi-tenant worker system with strict timeouts, " +
-        "retries/backoff, and an ops dashboard to harden reliability under " +
-        "third-party failures.",
-      "Authored a typed R-Series client + distributed Redis token-bucket " +
-        "limiter to stabilize concurrency and sustain 7+ months incident-" +
-        "free operation.",
+        "retries/backoff, and ops dashboard",
+      "Authored a typed Lightspeed R-Series API client + distributed Redis " +
+        "token-bucket limiter to stabilize concurrency",
     ],
     heroImage: "med-supplies",
     heroImageSize: {
@@ -111,9 +169,10 @@ export const WORK_PROJECTS: WorkProject[] = [
     url: "https://www.atgsportsmm.com",
     teamSize: "5-person engineering pod + founder",
     status: "Handed off to a long-term partner firm",
-    customer: {
+    for: {
       name: "ATG Sports",
       url: "https://www.atgsportsmm.com",
+      type: "job",
     },
     stack: [
       "ASP.NET Core",
@@ -125,14 +184,15 @@ export const WORK_PROJECTS: WorkProject[] = [
       "Render.com",
     ],
     description:
-      "Led architecture and major backend + UI components for a scouting/" +
-      "ops platform that digitized the agency's workflows and transitioned " +
-      "cleanly to a partner firm.",
+      "A scouting/ops platform that digitized the agency's workflows and " +
+      "transitioned cleanly to a partner firm.",
     highlights: [
-      "Drove a performance initiative: 21% overall improvement and 5× " +
+      "Led project, including designing architecture and major backend + UI " +
+        "flows",
+      "Drove performance initiative: 21% overall improvement and 5x " +
         "faster critical endpoints by reshaping query patterns, adding " +
         "finer-grained caching, and materializing search-optimized views " +
-        "(OpenSearch + Redis) with controlled staleness.",
+        "with controlled staleness.",
       "Built ingestion pipelines and operational tooling while partnering " +
         "with the founder/PM on roadmap tradeoffs and delivery.",
     ],
@@ -154,28 +214,26 @@ export const WORK_PROJECTS: WorkProject[] = [
     ],
   },
   {
-    title: "Berry Homes Live Status Page",
+    title: "Berry Homes Internal Live Status Page",
     roles: ["Software Developer - Go"],
     period: "May 2023 — Sept 2023",
     url: "https://berryhomes.ca",
     usedBy: [],
     teamSize: "2 Software Developers + Company Representative",
     status: "Job completed.",
-    customer: {
+    for: {
       name: "Berry Homes",
       url: "https://berryhomes.ca",
+      type: "contract",
     },
     stack: ["Go"],
     description:
       "Built a Go web service that ingests company data and powers an " +
       "internal dashboard with visualizations and metrics.",
-    highlights: [
-      "Dashboard remains in use internally.",
-    ],
     heroImage: "berry-homes",
     heroImageSize: {
-      height: 600,
-      width: 533,
+      height: 196,
+      width: 500,
     },
   },
   {
@@ -191,8 +249,8 @@ export const WORK_PROJECTS: WorkProject[] = [
     highlights: ["Source code on GitHub: github.com/aeldidi/albumart.digital."],
     heroImage: "albumart-digital",
     heroImageSize: {
-      height: 600,
-      width: 533,
+      height: 222,
+      width: 496,
     },
   },
 ];
